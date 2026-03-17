@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lerato Caza | Cybersecurity Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --orange: #FF6B00;
+      --orange-dim: #cc5500;
+      --orange-glow: rgba(255,107,0,0.18);
+      --orange-faint: rgba(255,107,0,0.07);
+      --black: #080808;
+      --dark: #111111;
+      --card: #141414;
+      --border: #222222;
+      --text: #e8e8e8;
+      --muted: #888888;
+      --mono: 'Share Tech Mono', monospace;
+      --head: 'Barlow Condensed', sans-serif;
+      --body: 'Barlow', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: var(--body);
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      width: 10px; height: 10px;
+      background: var(--orange);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.1s;
+      mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      width: 34px; height: 34px;
+      border: 1px solid var(--orange);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9998;
+      transition: all 0.15s ease;
+      opacity: 0.6;
+    }
+
+    /* Scanlines overlay */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.08) 2px,
+        rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 500;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: rgba(8,8,8,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 1rem;
+      color: var(--orange);
+      letter-spacing: 0.05em;
+    }
+    .nav-logo span { color: var(--muted); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--orange); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 8rem 3rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 70% 50%, rgba(255,107,0,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(255,107,0,0.04) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.3;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    }
+
+    .hero-content { position: relative; z-index: 2; max-width: 900px; }
+
+    .hero-tag {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--orange);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .hero-tag::before {
+      content: '';
+      width: 40px; height: 1px;
+      background: var(--orange);
+    }
+
+    .hero h1 {
+      font-family: var(--head);
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      font-weight: 900;
+      line-height: 0.95;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 .name-orange { color: var(--orange); }
+    .hero h1 .name-dim { color: #333; }
+
+    .hero-sub {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 520px;
+      margin-bottom: 3rem;
+      border-left: 2px solid var(--orange);
+      padding-left: 1.2rem;
+    }
+
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn-primary {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.9rem 2rem;
+      background: var(--orange);
+      color: #000;
+      border: none;
+      text-decoration: none;
+      font-weight: 700;
+      transition: all 0.2s;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    }
+    .btn-primary:hover {
+      background: #fff;
+      transform: translateY(-2px);
+    }
+    .btn-outline {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.9rem 2rem;
+      background: transparent;
+      color: var(--orange);
+      border: 1px solid var(--orange);
+      text-decoration: none;
+      transition: all 0.2s;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    }
+    .btn-outline:hover {
+      background: var(--orange-faint);
+      transform: translateY(-2px);
+    }
+
+    /* Animated terminal */
+    .hero-terminal {
+      position: absolute;
+      right: 3rem; top: 50%;
+      transform: translateY(-50%);
+      width: 380px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--orange);
+      z-index: 2;
+      display: none;
+    }
+    @media(min-width: 1100px) { .hero-terminal { display: block; } }
+    .terminal-bar {
+      padding: 0.6rem 1rem;
+      background: #0e0e0e;
+      display: flex; align-items: center; gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .t-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .t-red { background: #ff5f57; }
+    .t-yellow { background: #febc2e; }
+    .t-green { background: #28c840; }
+    .terminal-title {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-left: auto; margin-right: auto;
+    }
+    .terminal-body {
+      padding: 1.2rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      line-height: 2;
+      min-height: 220px;
+    }
+    .t-line { display: block; }
+    .t-prompt { color: var(--orange); }
+    .t-cmd { color: #e8e8e8; }
+    .t-out { color: #28c840; }
+    .t-comment { color: var(--muted); }
+    .t-cursor {
+      display: inline-block;
+      width: 8px; height: 14px;
+      background: var(--orange);
+      animation: blink 1s infinite;
+      vertical-align: middle;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* SECTIONS */
+    section { padding: 6rem 3rem; }
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--orange);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+    .section-title {
+      font-family: var(--head);
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      line-height: 1;
+      margin-bottom: 3rem;
+    }
+    .section-title span { color: var(--orange); }
+    .divider {
+      width: 60px; height: 3px;
+      background: var(--orange);
+      margin-bottom: 3rem;
+    }
+
+    /* ABOUT */
+    #about { background: var(--dark); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    @media(max-width:768px){ .about-grid { grid-template-columns: 1fr; } }
+    .about-text p {
+      font-size: 1rem;
+      line-height: 1.9;
+      color: #bbb;
+      margin-bottom: 1.2rem;
+    }
+    .about-text p strong { color: var(--orange); font-weight: 500; }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+    }
+    .stat-box {
+      background: var(--card);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: background 0.2s;
+    }
+    .stat-box:hover { background: #1a1a1a; }
+    .stat-num {
+      font-family: var(--head);
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--orange);
+      line-height: 1;
+      display: block;
+    }
+    .stat-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 0.4rem;
+      display: block;
+    }
+
+    /* SKILLS */
+    #skills { background: var(--black); }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--border);
+    }
+    .skill-card {
+      background: var(--card);
+      padding: 2rem;
+      transition: background 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .skill-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--orange);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .skill-card:hover::before { transform: scaleX(1); }
+    .skill-card:hover { background: #161616; }
+    .skill-icon {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .skill-name {
+      font-family: var(--head);
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.8rem;
+      color: var(--text);
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .tag {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      padding: 0.25rem 0.6rem;
+      background: var(--orange-faint);
+      border: 1px solid rgba(255,107,0,0.25);
+      color: var(--orange);
+      letter-spacing: 0.05em;
+    }
+
+    /* PROJECTS */
+    #projects { background: var(--dark); }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    .project-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+      position: relative;
+    }
+    .project-card:hover {
+      border-color: var(--orange);
+      transform: translateY(-4px);
+    }
+    .project-header {
+      padding: 1.5rem 1.5rem 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .project-lang {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      padding: 0.3rem 0.8rem;
+      background: var(--orange);
+      color: #000;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+    }
+    .project-num {
+      font-family: var(--head);
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: #1e1e1e;
+      line-height: 1;
+    }
+    .project-body { padding: 1.5rem; }
+    .project-title {
+      font-family: var(--head);
+      font-size: 1.4rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.8rem;
+      color: var(--text);
+    }
+    .project-desc {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+    }
+    .project-features {
+      list-style: none;
+      margin-bottom: 1.5rem;
+    }
+    .project-features li {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: #999;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid #1a1a1a;
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .project-features li::before {
+      content: '▸';
+      color: var(--orange);
+      font-size: 0.7rem;
+    }
+    .project-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex; gap: 0.6rem; flex-wrap: wrap;
+    }
+    .project-tag {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      padding: 0.2rem 0.5rem;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    /* CERTS */
+    #certifications { background: var(--black); }
+    .certs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1px;
+      background: var(--border);
+    }
+    .cert-card {
+      background: var(--card);
+      padding: 1.8rem;
+      transition: background 0.2s;
+      position: relative;
+    }
+    .cert-card:hover { background: #161616; }
+    .cert-issuer {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--orange);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    .cert-name {
+      font-family: var(--head);
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+    .cert-date {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--muted);
+    }
+    .cert-badge {
+      position: absolute;
+      top: 1.5rem; right: 1.5rem;
+      width: 32px; height: 32px;
+      border: 2px solid var(--orange);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem;
+    }
+
+    /* CV SECTION */
+    #cv { background: var(--dark); }
+    .cv-block {
+      display: flex;
+      align-items: center;
+      gap: 4rem;
+      flex-wrap: wrap;
+    }
+    .cv-text { flex: 1; min-width: 260px; }
+    .cv-text p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: #bbb;
+      margin-bottom: 2rem;
+    }
+    .cv-preview {
+      flex: 1; min-width: 260px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--orange);
+      padding: 2rem;
+    }
+    .cv-preview-title {
+      font-family: var(--head);
+      font-size: 1.8rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 0.3rem;
+    }
+    .cv-preview-sub {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.08em;
+    }
+    .cv-line {
+      display: flex; justify-content: space-between;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 0.75rem;
+    }
+    .cv-line-label { color: var(--muted); }
+    .cv-line-val { color: var(--text); }
+
+    /* CONTACT */
+    #contact {
+      background: var(--black);
+      text-align: center;
+    }
+    .contact-inner { max-width: 600px; margin: 0 auto; }
+    .contact-inner p {
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+    }
+    .contact-links {
+      display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+    .contact-item {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.8rem 1.5rem;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; gap: 0.6rem;
+      transition: all 0.2s;
+      letter-spacing: 0.05em;
+    }
+    .contact-item:hover {
+      border-color: var(--orange);
+      color: var(--orange);
+    }
+    .contact-item span { color: var(--orange); }
+
+    /* FOOTER */
+    footer {
+      padding: 2rem 3rem;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-copy {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+    .footer-copy span { color: var(--orange); }
+    .footer-status {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: #28c840;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .status-dot {
+      width: 6px; height: 6px;
+      background: #28c840;
+      border-radius: 50%;
+      animation: pulse-green 2s infinite;
+    }
+    @keyframes pulse-green {
+      0%,100%{ box-shadow: 0 0 0 0 rgba(40,200,64,0.4); }
+      50%{ box-shadow: 0 0 0 6px rgba(40,200,64,0); }
+    }
+
+    /* ANIMATIONS */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Mobile nav */
+    @media(max-width: 600px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 4rem 1.5rem; }
+      .hero { padding: 7rem 1.5rem 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">&gt; lerato<span>_</span>caza.sh</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#certifications">Certs</a></li>
+    <li><a href="#cv">CV</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Cybersecurity Professional</div>
+    <h1>
+      <span class="name-dim">LERATO</span><br>
+      <span class="name-orange">JOSHUA</span><br>
+      <span class="name-dim">CAZA</span>
+    </h1>
+    <p class="hero-sub">
+      // Aspiring SOC Analyst &amp; Cybersecurity Learner<br>
+      // Cisco NetAcad Certified &bull; Sebokeng, Gauteng, ZA<br>
+      // Building skills from the ground up — one cert at a time
+    </p>
+    <div class="hero-ctas">
+      <a href="#projects" class="btn-primary">View Projects</a>
+      <a href="#cv" class="btn-outline">Download CV</a>
+    </div>
+  </div>
+
+  <!-- Terminal -->
+  <div class="hero-terminal">
+    <div class="terminal-bar">
+      <div class="t-dot t-red"></div>
+      <div class="t-dot t-yellow"></div>
+      <div class="t-dot t-green"></div>
+      <span class="terminal-title">lerato@kali:~$</span>
+    </div>
+    <div class="terminal-body" id="terminalBody">
+      <span class="t-line"><span class="t-comment"># whoami</span></span>
+      <span class="t-line"><span class="t-prompt">$ </span><span class="t-cmd" id="typedText"></span><span class="t-cursor" id="termCursor"></span></span>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">// 01. about</div>
+  <div class="section-title">Who I <span>Am</span></div>
+  <div class="about-grid fade-up">
+    <div class="about-text">
+      <p>I'm <strong>Lerato Joshua Caza</strong>, a 23-year-old self-taught cybersecurity enthusiast from Sebokeng, Gauteng, South Africa. With no formal employer pushing me, I took the initiative to complete <strong>seven Cisco Networking Academy courses</strong> — because I believe in the power of consistent self-improvement.</p>
+      <p>My passion is <strong>cybersecurity and SOC analysis</strong>. I understand the fundamentals of threat detection, network security, Linux systems, and scripting — and I'm actively building toward my first professional role through learnerships and hands-on projects.</p>
+      <p>I believe that where you start does not determine where you end up. I'm <strong>immediately available</strong> and ready to bring energy, curiosity and dedication to any team.</p>
+    </div>
+    <div class="about-stats">
+      <div class="stat-box">
+        <span class="stat-num">7</span>
+        <span class="stat-label">Cisco Courses</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">3</span>
+        <span class="stat-label">Languages</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">23</span>
+        <span class="stat-label">Years Old</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">∞</span>
+        <span class="stat-label">Ambition</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label">// 02. skills</div>
+  <div class="section-title">Technical <span>Arsenal</span></div>
+  <div class="skills-grid fade-up">
+    <div class="skill-card">
+      <span class="skill-icon">🛡️</span>
+      <div class="skill-name">Cybersecurity</div>
+      <div class="skill-tags">
+        <span class="tag">Threat Analysis</span>
+        <span class="tag">CIA Triad</span>
+        <span class="tag">IDS/IPS</span>
+        <span class="tag">Malware Types</span>
+        <span class="tag">Social Engineering</span>
+        <span class="tag">Incident Response</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <span class="skill-icon">🌐</span>
+      <div class="skill-name">Networking</div>
+      <div class="skill-tags">
+        <span class="tag">TCP/IP</span>
+        <span class="tag">OSI Model</span>
+        <span class="tag">Packet Tracer</span>
+        <span class="tag">Routing</span>
+        <span class="tag">Switching</span>
+        <span class="tag">Firewall</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <span class="skill-icon">🐧</span>
+      <div class="skill-name">Linux</div>
+      <div class="skill-tags">
+        <span class="tag">CLI</span>
+        <span class="tag">File Permissions</span>
+        <span class="tag">bash</span>
+        <span class="tag">NDG Unhatched</span>
+        <span class="tag">Networking CLI</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <span class="skill-icon">🐍</span>
+      <div class="skill-name">Python</div>
+      <div class="skill-tags">
+        <span class="tag">Scripting</span>
+        <span class="tag">Automation</span>
+        <span class="tag">Port Scanner</span>
+        <span class="tag">File I/O</span>
+        <span class="tag">Functions</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <span class="skill-icon">🌍</span>
+      <div class="skill-name">Web Dev</div>
+      <div class="skill-tags">
+        <span class="tag">HTML5</span>
+        <span class="tag">CSS3</span>
+        <span class="tag">PHP</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">Responsive</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <span class="skill-icon">🔧</span>
+      <div class="skill-name">IT Support</div>
+      <div class="skill-tags">
+        <span class="tag">PC Hardware</span>
+        <span class="tag">Troubleshooting</span>
+        <span class="tag">OS Install</span>
+        <span class="tag">Help Desk</span>
+        <span class="tag">Diagnostics</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">// 03. projects</div>
+  <div class="section-title">My <span>Projects</span></div>
+  <div class="projects-grid fade-up">
+
+    <!-- Python Project -->
+    <div class="project-card">
+      <div class="project-header">
+        <span class="project-lang">Python</span>
+        <span class="project-num">01</span>
+      </div>
+      <div class="project-body">
+        <div class="project-title">Network Port Scanner</div>
+        <p class="project-desc">A command-line cybersecurity tool that scans a target IP address for open ports, identifies running services, and generates a basic vulnerability report — a core skill for any SOC analyst.</p>
+        <ul class="project-features">
+          <li>Scans a range of TCP ports on any target IP</li>
+          <li>Identifies common services (HTTP, SSH, FTP, etc.)</li>
+          <li>Flags potentially dangerous open ports</li>
+          <li>Exports results to a .txt report file</li>
+          <li>Command-line interface with coloured output</li>
+        </ul>
+      </div>
+      <div class="project-footer">
+        <span class="project-tag">Python 3</span>
+        <span class="project-tag">socket</span>
+        <span class="project-tag">threading</span>
+        <span class="project-tag">CLI</span>
+      </div>
+    </div>
+
+    <!-- PHP Project -->
+    <div class="project-card">
+      <div class="project-header">
+        <span class="project-lang">PHP</span>
+        <span class="project-num">02</span>
+      </div>
+      <div class="project-body">
+        <div class="project-title">Secure Login System</div>
+        <p class="project-desc">A full-stack user authentication system with registration, login, and session management. Implements cybersecurity best practices including password hashing, SQL injection prevention, and session security.</p>
+        <ul class="project-features">
+          <li>User registration with input validation</li>
+          <li>Password hashing using bcrypt</li>
+          <li>SQL injection prevention with prepared statements</li>
+          <li>Secure session management and logout</li>
+          <li>MySQL database with users table</li>
+        </ul>
+      </div>
+      <div class="project-footer">
+        <span class="project-tag">PHP 8</span>
+        <span class="project-tag">MySQL</span>
+        <span class="project-tag">HTML/CSS</span>
+        <span class="project-tag">bcrypt</span>
+      </div>
+    </div>
+
+    <!-- JavaScript Project -->
+    <div class="project-card">
+      <div class="project-header">
+        <span class="project-lang">JavaScript</span>
+        <span class="project-num">03</span>
+      </div>
+      <div class="project-body">
+        <div class="project-title">Password Strength Analyser</div>
+        <p class="project-desc">A real-time browser-based tool that analyses password strength, detects common patterns, checks against weak password lists, and educates users on creating secure passwords.</p>
+        <ul class="project-features">
+          <li>Real-time strength meter as you type</li>
+          <li>Checks length, complexity and character variety</li>
+          <li>Detects common weak passwords and patterns</li>
+          <li>Entropy calculation displayed to user</li>
+          <li>Generates strong password suggestions</li>
+        </ul>
+      </div>
+      <div class="project-footer">
+        <span class="project-tag">Vanilla JS</span>
+        <span class="project-tag">HTML5</span>
+        <span class="project-tag">CSS3</span>
+        <span class="project-tag">Regex</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="section-label">// 04. certifications</div>
+  <div class="section-title">Cisco <span>Certified</span></div>
+  <div class="certs-grid fade-up">
+    <div class="cert-card">
+      <div class="cert-issuer">Cisco NetAcad</div>
+      <div class="cert-name">Introduction to Cybersecurity</div>
+      <div class="cert-date">Jun 2024</div>
+      <div class="cert-badge">🛡️</div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-issuer">Cisco NetAcad</div>
+      <div class="cert-name">IT Essentials: PC Hardware &amp; Software</div>
+      <div class="cert-date">Feb 2025</div>
+      <div class="cert-badge">💻</div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-issuer">Cisco NetAcad</div>
+      <div class="cert-name">NDG Linux Unhatched</div>
+      <div class="cert-date">Jun 2024</div>
+      <div class="cert-badge">🐧</div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-issuer">Cisco NetAcad</div>
+      <div class="cert-name">Introduction to Packet Tracer</div>
+      <div class="cert-date">Jun 2024</div>
+      <div class="cert-badge">🌐</div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-issuer">Cisco NetAcad / Sci-Bono</div>
+      <div class="cert-name">HTML Essentials</div>
+      <div class="cert-date">Nov 2025</div>
+      <div class="cert-badge">🔤</div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-issuer">Cisco NetAcad / Sci-Bono</div>
+      <div class="cert-name">CSS Essentials</div>
+      <div class="cert-date">Jan 2026</div>
+      <div class="cert-badge">🎨</div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-issuer">Cisco NetAcad</div>
+      <div class="cert-name">Get Connected</div>
+      <div class="cert-date">Jun 2024</div>
+      <div class="cert-badge">📡</div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-issuer">Dept. of Basic Education</div>
+      <div class="cert-name">National Senior Certificate — NQF Level 4</div>
+      <div class="cert-date">Dec 2020</div>
+      <div class="cert-badge">🎓</div>
+    </div>
+  </div>
+</section>
+
+<!-- CV -->
+<section id="cv">
+  <div class="section-label">// 05. curriculum vitae</div>
+  <div class="section-title">My <span>CV</span></div>
+  <div class="cv-block fade-up">
+    <div class="cv-text">
+      <p>My full CV contains all my certifications, technical skills, education history, and contact details. It is available for download as a PDF — ready to be submitted to any employer or learnership programme.</p>
+      <a href="Lerato_Caza_CV.pdf" download class="btn-primary">⬇ Download CV (PDF)</a>
+    </div>
+    <div class="cv-preview">
+      <div class="cv-preview-title">Lerato Joshua Caza</div>
+      <div class="cv-preview-sub">Cybersecurity Professional &bull; NQF Level 4</div>
+      <div class="cv-line">
+        <span class="cv-line-label">Location</span>
+        <span class="cv-line-val">Sebokeng, Gauteng</span>
+      </div>
+      <div class="cv-line">
+        <span class="cv-line-label">Phone</span>
+        <span class="cv-line-val">063 989 4765</span>
+      </div>
+      <div class="cv-line">
+        <span class="cv-line-label">Email</span>
+        <span class="cv-line-val">lrtcaza@gmail.com</span>
+      </div>
+      <div class="cv-line">
+        <span class="cv-line-label">Certifications</span>
+        <span class="cv-line-val">7x Cisco NetAcad</span>
+      </div>
+      <div class="cv-line">
+        <span class="cv-line-label">Education</span>
+        <span class="cv-line-val">NSC — NQF Level 4</span>
+      </div>
+      <div class="cv-line">
+        <span class="cv-line-label">Status</span>
+        <span class="cv-line-val" style="color:#28c840">Available Immediately</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">// 06. contact</div>
+  <div class="section-title">Get In <span>Touch</span></div>
+  <div class="contact-inner fade-up">
+    <p>I am actively looking for cybersecurity learnerships and junior IT opportunities in South Africa. If you have an opportunity or just want to connect, reach out — I respond promptly.</p>
+    <div class="contact-links">
+      <a href="tel:0639894765" class="contact-item">
+        <span>📞</span> 063 989 4765
+      </a>
+      <a href="mailto:lrtcaza@gmail.com" class="contact-item">
+        <span>✉</span> lrtcaza@gmail.com
+      </a>
+      <a href="Lerato_Caza_CV.pdf" download class="contact-item">
+        <span>📄</span> Download CV
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-copy">&copy; 2026 <span>Lerato Joshua Caza</span> — Built with HTML, CSS &amp; JS</div>
+  <div class="footer-status">
+    <div class="status-dot"></div>
+    Available for opportunities
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx - 5 + 'px';
+    cursor.style.top = my - 5 + 'px';
+  });
+  function animRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx - 17 + 'px';
+    ring.style.top = ry - 17 + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+
+  // Terminal typing
+  const lines = [
+    { text: 'lerato_caza', delay: 80 },
+  ];
+  const output = [
+    '> name: Lerato Joshua Caza',
+    '> role: Cybersecurity Learner',
+    '> location: Sebokeng, ZA',
+    '> skills: [cyber, linux, python]',
+    '> status: seeking_learnership',
+    '> ready: TRUE ✓',
+  ];
+  const el = document.getElementById('typedText');
+  const cur = document.getElementById('termCursor');
+  const body = document.getElementById('terminalBody');
+  let i = 0;
+  function typeChar() {
+    if (i < lines[0].text.length) {
+      el.textContent += lines[0].text[i++];
+      setTimeout(typeChar, lines[0].delay);
+    } else {
+      cur.style.display = 'none';
+      setTimeout(() => {
+        output.forEach((line, idx) => {
+          setTimeout(() => {
+            const span = document.createElement('span');
+            span.className = 't-line';
+            span.innerHTML = `<span class="t-out">${line}</span>`;
+            body.appendChild(span);
+          }, idx * 300);
+        });
+      }, 400);
+    }
+  }
+  setTimeout(typeChar, 1200);
+
+  // Scroll animations
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
